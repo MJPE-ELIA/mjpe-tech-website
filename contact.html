@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact - MJPE Tech</title>
+    <meta
+      name="description"
+      content="Entrez en contact avec MJPE Tech pour vos projets d'ingénierie, développement web, solutions IA ou installations électriques."
+    />
 
     <link rel="stylesheet" href="assets/css/style.css" />
 
@@ -16,7 +20,6 @@
   </head>
 
   <body>
-    <!-- HEADER -->
     <header class="header">
       <div class="logo">MJPE Tech</div>
 
@@ -28,50 +31,77 @@
       </nav>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
       <h1>Contactez MJPE Tech</h1>
       <p>Nous sommes ouverts aux collaborations, idées et opportunités.</p>
     </section>
 
-    <!-- CONTACT FORM -->
     <section class="section">
-      <form style="max-width: 600px; margin: auto; text-align: left">
-        <label>Nom</label><br />
-        <input
-          type="text"
-          placeholder="Votre nom"
-          style="width: 100%; padding: 10px; margin: 10px 0"
-        /><br />
+      <div class="form-container">
+        <form action="#" method="POST" class="contact-form">
+          <div class="form-group">
+            <label for="name">Nom complet</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Votre nom"
+              required
+            />
+          </div>
 
-        <label>Email</label><br />
-        <input
-          type="email"
-          placeholder="Votre email"
-          style="width: 100%; padding: 10px; margin: 10px 0"
-        /><br />
+          <div class="form-group">
+            <label for="email">Adresse Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Votre email"
+              required
+            />
+          </div>
 
-        <label>Message</label><br />
-        <textarea
-          placeholder="Votre message"
-          style="width: 100%; padding: 10px; margin: 10px 0; height: 120px"
-        ></textarea
-        ><br />
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Votre message"
+              required
+            ></textarea>
+          </div>
 
-        <button class="btn primary" type="submit">Envoyer</button>
-      </form>
+          <button class="btn primary" type="submit">Envoyer le message</button>
+        </form>
+      </div>
     </section>
 
-    <!-- INFO -->
-    <section class="section values">
-      <h2>Informations</h2>
-      <p>Email : mjpetech@gmail.com (future)</p>
-      <p>GitHub : MJPE-ELIA</p>
+    <section class="section values contact-info">
+      <h2>Nos Informations</h2>
+      <p>
+        📧 <strong>Email :</strong> contact@mjpetech.com (Bientôt disponible)
+      </p>
+      <p>
+        🐙 <strong>GitHub :</strong>
+        <a href="https://github.com/MJPE-ELIA" target="_blank">MJPE-ELIA</a>
+      </p>
     </section>
 
-    <!-- FOOTER -->
     <footer class="footer">
-      <p>© 2026 MJPE Tech</p>
+      <div class="footer-content">
+        <h3>MJPE Tech</h3>
+        <p>Transformer la passion en innovation</p>
+        <div class="foot">
+          <p><strong>Réseaux :</strong></p>
+          <ul>
+            <li>
+              <a href="https://github.com/MJPE-ELIA" target="_blank">GitHub</a>
+            </li>
+            <li><a href="#">LinkedIn (Bientôt disponible)</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2026 MJPE Tech - Tous droits réservés</p>
     </footer>
   </body>
 </html>
