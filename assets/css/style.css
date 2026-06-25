@@ -432,3 +432,22 @@ body {
     padding: 20px;
   }
 }
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.github-link {
+  color: #22d3ee !important; /* Force la couleur cyan */
+  text-decoration: none !important; /* Enlève le soulignement moche */
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 5px;
+  transition: opacity 0.2s ease;
+}
+
+.github-link:hover {
+  opacity: 0.8; /* Légère transparence au survol */
+}

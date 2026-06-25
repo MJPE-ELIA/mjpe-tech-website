@@ -1,24 +1,17 @@
 // ==========================================================================
 // MJPE Tech - Main JS
-// Version 1.1 - Interactions & Dynamisme
 // ==========================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("MJPE Tech JS chargé avec succès 🚀");
 
-  // 1. Défilement fluide pour les ancres internes (#)
+  // 1. Gestion du défilement fluide
   initSmoothScroll();
 
-  // 2. Mise en avant de la page active dans le menu de navigation
-  highlightCurrentPage();
-
-  // 3. Animation et validation basique du formulaire de contact
-  initContactForm();
+  // 2. Gestion de l'envoi asynchrone du formulaire
+  initContactFormAJAX();
 });
 
-/**
- * Gère le défilement fluide lors d'un clic sur un lien d'ancre interne
- */
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
@@ -37,50 +30,45 @@ function initSmoothScroll() {
   });
 }
 
-/**
- * Ajoute une classe "active" au lien de la navigation qui correspond à la page actuelle
- */
-function highlightCurrentPage() {
-  const currentPath = window.location.pathname;
-  const navLinks = document.querySelectorAll(".nav a");
-
-  navLinks.forEach((link) => {
-    // Récupère juste le nom du fichier (ex: index.html ou contact.html)
-    const linkPath = link.getAttribute("href");
-
-    if (
-      currentPath.includes(linkPath) ||
-      (currentPath === "/" && linkPath === "index.html")
-    ) {
-      link.style.color = "#22d3ee";
-      link.style.fontWeight = "700";
-    }
-  });
-}
-
-/**
- * Gère les interactions et la validation du formulaire de contact
- */
-function initContactForm() {
+function initContactFormAJAX() {
   const form = document.querySelector(".contact-form");
+  const nameInput = document.getElementById("name");
 
   if (form) {
     form.addEventListener("submit", function (e) {
-      // Pour l'instant, on bloque l'envoi réel pour afficher une jolie alerte
+      // Empêche la redirection vers la page blanche de Formspree
       e.preventDefault();
 
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
+      // Préparation des données du formulaire
+      const formData = new FormData(form);
 
-      if (name && email) {
-        // Création d'un message de remerciement dynamique
-        alert(
-          `Merci pour votre message, ${name} ! L'équipe de MJPE Tech vous répondra rapidement à l'adresse : ${email}.`,
-        );
+      // Envoi des données en arrière-plan à Formspree
+      fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            // 1. Tout supprimer (réinitialise le formulaire)
+            form.reset();
 
-        // Réinitialise le formulaire
-        form.reset();
-      }
+            // 2. Remettre le curseur (focus) dans le champ Nom
+            if (nameInput) {
+              nameInput.focus();
+            }
+
+            console.log("Message envoyé avec succès !");
+          } else {
+            alert("Une erreur est survenue lors de l'envoi.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur réseau :", error);
+          alert("Impossible d'envoyer le message pour le moment.");
+        });
     });
   }
 }

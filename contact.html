@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact - MJPE Tech</title>
-    <meta
-      name="description"
-      content="Entrez en contact avec MJPE Tech pour vos projets d'ingénierie, développement web, solutions IA ou installations électriques."
-    />
 
     <link rel="stylesheet" href="assets/css/style.css" />
 
@@ -38,9 +34,13 @@
 
     <section class="section">
       <div class="form-container">
-        <form action="#" method="POST" class="contact-form">
+        <form
+          class="contact-form"
+          action="https://formspree.io/f/xjgqygwq"
+          method="POST"
+        >
           <div class="form-group">
-            <label for="name">Nom complet</label>
+            <label for="name">Nom</label>
             <input
               type="text"
               id="name"
@@ -51,7 +51,7 @@
           </div>
 
           <div class="form-group">
-            <label for="email">Adresse Email</label>
+            <label for="email">Email</label>
             <input
               type="email"
               id="email"
@@ -71,37 +71,49 @@
             ></textarea>
           </div>
 
-          <button class="btn primary" type="submit">Envoyer le message</button>
+          <button class="btn primary" type="submit">Envoyer</button>
         </form>
       </div>
     </section>
 
     <section class="section values contact-info">
-      <h2>Nos Informations</h2>
+      <h2>Informations</h2>
       <p>
-        📧 <strong>Email :</strong> contact@mjpetech.com (Bientôt disponible)
+        📧 Email :
+        <a href="mailto:mjpetech@gmail.com" class="github-link"
+          >mjpetech@gmail.com</a
+        >
       </p>
       <p>
-        🐙 <strong>GitHub :</strong>
-        <a href="https://github.com/MJPE-ELIA" target="_blank">MJPE-ELIA</a>
+        🐙 GitHub :
+        <a
+          href="https://github.com/MJPE-ELIA"
+          target="_blank"
+          class="github-link"
+          >MJPE-ELIA</a
+        >
       </p>
     </section>
 
     <footer class="footer">
       <div class="footer-content">
-        <h3>MJPE Tech</h3>
-        <p>Transformer la passion en innovation</p>
+        <div class="footer-brand">
+          <h3>MJPE Tech</h3>
+          <p>Transformer la passion en innovation</p>
+        </div>
         <div class="foot">
           <p><strong>Réseaux :</strong></p>
-          <ul>
-            <li>
-              <a href="https://github.com/MJPE-ELIA" target="_blank">GitHub</a>
-            </li>
-            <li><a href="#">LinkedIn (Bientôt disponible)</a></li>
-          </ul>
+          <a
+            href="https://github.com/MJPE-ELIA"
+            target="_blank"
+            class="github-link"
+            >GitHub</a
+          >
         </div>
       </div>
       <p class="copyright">© 2026 MJPE Tech - Tous droits réservés</p>
     </footer>
+
+    <script src="assets/js/main.js"></script>
   </body>
 </html>
