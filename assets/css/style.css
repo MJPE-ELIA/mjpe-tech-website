@@ -1,5 +1,30 @@
 /* ==========================================================================
-   GLOBAL IMPROVEMENTS & BASE
+   1. VARIABLES DE COULEURS & DESIGN SYSTEM (Pour maintenir la cohérence)
+   ========================================================================== */
+:root {
+  --bg-dark: #060913; /* Fond principal spatial ultra-sombre */
+  --bg-card: rgba(
+    17,
+    24,
+    39,
+    0.55
+  ); /* Fond de carte en verre semi-transparent */
+  --primary: #22d3ee; /* Cyan électrique principal */
+  --primary-glow: rgba(34, 211, 238, 0.3);
+  --secondary: #6366f1; /* Violet/Indigo néon pour les dégradés */
+  --secondary-glow: rgba(99, 102, 241, 0.2);
+  --text-main: #f3f4f6; /* Texte principal clair */
+  --text-muted: #9ca3af; /* Texte secondaire estompé */
+  --border: rgba(
+    255,
+    255,
+    255,
+    0.06
+  ); /* Bordure discrète pour l'effet miroir */
+}
+
+/* ==========================================================================
+   2. BASE, DÉFILEMENT (SCROLLBAR) & ANIMATIONS GLOBALES
    ========================================================================== */
 html {
   scroll-behavior: smooth;
@@ -13,413 +38,624 @@ html {
 }
 
 body {
-  background: #0b0f1a;
-  color: #e5e7eb;
+  background: var(--bg-dark);
+  color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  /* Petits halos de lumière discrets en arrière-plan global */
+  background-image:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(99, 102, 241, 0.05) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(34, 211, 238, 0.05) 0%,
+      transparent 40%
+    );
+}
+/* PERSONNALISATION TRÈS STYLÉE DE LA BARRE DE DÉFILEMENT (Scrollbar) */
+::-webkit-scrollbar {
+  width: 10px; /* Largeur de la barre verticale */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark); /* Couleur du fond de la barre */
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--primary),
+    var(--secondary)
+  ); /* Dégradé néon */
+  border-radius: 10px;
+  border: 2px solid var(--bg-dark); /* Crée un petit espace esthétique */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--secondary),
+    var(--primary)
+  ); /* Inverse au survol */
+}
+
+/* Animation clé pour l'effet de brillance ambiante */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+  }
 }
 
 /* ==========================================================================
-   HEADER / NAVIGATION
+   3. HEADER / NAVIGATION (EFFET GLASSMORPHISM HAUT DE GAMME)
    ========================================================================== */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 60px;
-  background: rgba(11, 15, 26, 0.9);
+  padding: 20px 5%;
+  background: rgba(
+    6,
+    9,
+    19,
+    0.75
+  ); /* Transparence pour voir le contenu défiler dessous */
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(31, 41, 55, 0.5);
+  backdrop-filter: blur(12px); /* Flou de verre poli hyper stylé */
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .logo {
   font-weight: 800;
-  font-size: 25px;
-  color: #22d3ee;
+  font-size: 26px;
+  /* Gradient text : Le logo brille en dégradé */
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text; /* Propriété standard ajoutée */
+  -webkit-text-fill-color: transparent;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.03); /* Effet discret de pop au survol */
 }
 
 .nav a {
-  margin-left: 20px;
+  margin-left: 25px;
   text-decoration: none;
-  color: #e5e7eb;
+  color: var(--text-muted);
   position: relative;
-  transition: 0.3s;
-  font-weight: 500;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
 }
 
+/* Animation sophistiquée du soulignement de lien */
 .nav a::after {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: -4px;
+  left: 50%;
+  bottom: -6px;
   width: 0%;
   height: 2px;
-  background: #22d3ee;
-  transition: 0.3s;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition:
+    width 0.3s ease,
+    left 0.3s ease;
+  border-radius: 2px;
 }
 
-.nav a:hover::after {
+.nav a:hover::after,
+.nav a.active::after {
   width: 100%;
+  left: 0; /* Se déploie du milieu vers les côtés au survol */
 }
 
-.nav a:hover {
-  color: #22d3ee;
+.nav a:hover,
+.nav a.active {
+  color: white;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+}
+/* BOUTON BURGER (MOBILE) */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+.menu-toggle .bar {
+  height: 2.5px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================================================
-   HERO SECTION
+   4. HERO SECTION (TEXTE GRADIENT FUTURISTE)
    ========================================================================== */
 .hero {
   text-align: center;
-  padding: 120px 20px;
-  background: linear-gradient(180deg, #0b0f1a, #111827);
+  /* On agrandit un peu l'espace intérieur pour bien voir l'image et l'équipe */
+  padding: 160px 20px;
+
+  /* APPLICATION DE L'IMAGE UNIQUEMENT ICI AVEC L'EFFET SOMBRE */
+  background-image:
+    linear-gradient(rgba(6, 9, 19, 0.85), rgba(6, 9, 19, 0.85)),
+    url("../images/bg-tech.jpg");
+
+  /* L'image reste fixe lors du défilement pour un effet parallaxe super classe */
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  /* Une petite bordure lumineuse fine en bas pour séparer proprement de la suite */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .hero h1 {
-  font-size: 46px;
+  font-size: 54px;
+  font-weight: 800;
   color: white;
-  margin-bottom: 20px;
-  font-weight: 700;
+  margin-bottom: 25px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  /* Effet de texte en dégradé géant */
+  background: linear-gradient(
+    135deg,
+    #ffffff 40%,
+    var(--primary) 70%,
+    var(--secondary) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text; /* Propriété standard ajoutée */
+  -webkit-text-fill-color: transparent;
 }
 
 .hero p {
-  max-width: 700px;
-  margin: auto;
-  margin-bottom: 35px;
+  max-width: 680px;
+  margin: 0 auto 40px auto;
   color: #cbd5e1;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
-/* ==========================================================================
-   BUTTONS
-   ========================================================================== */
-.btn {
-  padding: 12px 24px;
-  border-radius: 10px;
-  text-decoration: none;
-  display: inline-block;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  margin: 5px;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(34, 211, 238, 0.25);
-}
-
-.btn.primary {
-  background: #22d3ee;
-  color: #0b0f1a;
-}
-
-.btn.primary:hover {
-  background: #0ea5e9;
-}
-
-.btn.secondary {
-  border: 1px solid #22d3ee;
-  color: #22d3ee;
-}
-
-.btn.secondary:hover {
-  background: #22d3ee;
-  color: #0b0f1a;
-}
-
-/* ==========================================================================
-   SECTIONS & GRIDS
-   ========================================================================== */
-.section {
-  padding: 90px 20px;
-  text-align: center;
-  background: #111827;
-}
-
-.section h2 {
-  color: white;
-  margin-bottom: 20px;
-  font-size: 32px;
-  position: relative;
-}
-
-.section p {
-  max-width: 700px;
-  margin: auto;
-  color: #cbd5e1;
-}
-
-.values {
-  background: #0b0f1a;
-}
-
-.grid {
+.hero-buttons {
   display: flex;
   justify-content: center;
-  gap: 25px;
-  margin-top: 40px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
 /* ==========================================================================
-   CARDS (COMPOSANTS MULTI-PAGES)
+   5. BOUTONS DESIGN ULTRA-STYLÉS
    ========================================================================== */
-.card {
-  background: #1f2937;
-  padding: 30px 20px;
-  border-radius: 12px;
-  width: 280px; /* Élargi pour accueillir les descriptions de services et d'objectifs */
-  text-align: center;
-  border: 1px solid #374151;
-  transition: all 0.3s ease;
-}
-
-.card h3 {
-  color: #22d3ee;
-  margin-bottom: 12px;
-  font-size: 1.2rem;
-}
-
-.card p {
-  font-size: 0.95rem;
-  color: #9ca3af;
-  line-height: 1.5;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: #22d3ee;
-  box-shadow: 0 10px 25px rgba(34, 211, 238, 0.15);
-}
-
-/* Ajustement spécifique pour les petites cartes de valeurs pures */
-.values .card {
-  width: 200px;
-  font-weight: 600;
-}
-
-/* ==========================================================================
-   PAGE ABOUT : CITED / TEMOIGNAGE
-   ========================================================================== */
-.temoignage {
-  max-width: 650px;
-  margin: 40px auto 0 auto;
-  padding: 20px;
-  background: #111827;
-  border-left: 4px solid #22d3ee;
-  border-radius: 4px;
-  text-align: left;
-}
-
-.temoignage p {
-  font-style: italic;
-  color: #e5e7eb;
-  margin-bottom: 10px;
-}
-
-.temoignage cite {
-  font-size: 0.9rem;
-  color: #22d3ee;
-  font-weight: 600;
-  display: block;
-}
-
-/* ==========================================================================
-   PAGE NEWS : ACTUALITÉS
-   ========================================================================== */
-.news-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.news-card {
-  width: 100%;
-  max-width: 750px;
-  text-align: left;
-  padding: 25px;
-}
-
-.news-date {
+.btn {
   display: inline-block;
-  font-size: 0.85rem;
-  color: #22d3ee;
-  font-weight: 600;
-  margin-bottom: 8px;
-  background: rgba(34, 211, 238, 0.1);
-  padding: 3px 10px;
-  border-radius: 20px;
+  padding: 14px 32px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 50px; /* Bords parfaitement arrondis cyber */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Bouton Cyan Lumineux */
+.btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #060913;
+  box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3);
+}
+
+.btn.primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  /* Augmente la lueur magique au survol */
+  box-shadow:
+    0 8px 25px rgba(34, 211, 238, 0.5),
+    0 0 10px rgba(99, 102, 241, 0.4);
+}
+
+/* Bouton Transparent à Contour Lumineux */
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.03);
+  color: white;
+  border: 1.5px solid rgba(34, 211, 238, 0.4);
+}
+
+.btn.secondary:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: rgba(34, 211, 238, 0.08);
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
 }
 
 /* ==========================================================================
-   PAGE CONTACT : FORMULAIRE
+   6. SECTIONS ET CARTES EN VERRE (GLASS-CARDS)
    ========================================================================== */
-.form-container {
-  max-width: 600px;
+.section {
+  padding: 100px 5%;
+  max-width: 1200px;
   margin: 0 auto;
-  background: #0b0f1a;
-  padding: 40px;
-  border-radius: 12px;
-  border: 1px solid #1f2937;
 }
 
-.contact-form {
-  text-align: left;
+.section h2 {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 40px;
+  letter-spacing: -0.5px;
+}
+
+/* Décoration sous les titres H2 pour faire pro */
+.section h2::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.values {
+  background: rgba(17, 24, 39, 0.25);
+  max-width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* GRILLE ET COMPOSANT CARTE DE FUTUR */
+.grid,
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.news-container {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.card {
+  background: var(--bg-card);
+  padding: 35px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de lueur interne subtile au survol d'une carte */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 211, 238, 0.05),
+    rgba(99, 102, 241, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* HOVER DES CARTES : S'élèvent, s'illuminent et la bordure devient cyber */
+.card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(34, 211, 238, 0.1);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.news-card h3 {
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+/* Section CTA d'action finale */
+.cta {
+  text-align: center;
+  padding: 100px 20px;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.05) 0%,
+    transparent 70%
+  );
+}
+
+.cta h2::after {
+  margin: 10px auto 0 auto; /* Centre la ligne décorative sous le H2 */
+}
+
+/* ==========================================================================
+   7. INTERFACES SPÉCIFIQUES (ABOUT, FORMULAIRE CYBERPUNK)
+   ========================================================================== */
+/* Page À Propos */
+.about-founder {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 50px;
+}
+
+.profile-pic {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+  transition: all 0.4s ease;
+}
+
+/* La photo s'illumine et tourne légèrement au survol */
+.profile-pic:hover {
+  border-color: var(--primary);
+  transform: scale(1.04) rotate(2deg);
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+}
+
+.temoignage {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  padding: 35px;
+  border-left: 4px solid var(--primary);
+  border-radius: 4px 16px 16px 4px;
+}
+
+/* Page Contact : Formulaire en verre poli */
+.form-container {
+  max-width: 650px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  padding: 45px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .form-group label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: #e5e7eb;
-  font-size: 0.95rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 12px 15px;
-  background: #1f2937;
-  border: 1px solid #374151;
+  padding: 14px 18px;
+  background: rgba(6, 9, 19, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   color: white;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+/* HOVER & FOCUS DES CHAMPS : Deviennent luminescents */
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: rgba(34, 211, 238, 0.3);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #22d3ee;
+  border-color: var(--primary);
+  background: rgba(6, 9, 19, 0.9);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
 }
 
-.form-group textarea {
-  height: 140px;
-  resize: vertical;
-}
-
-.contact-form .btn {
-  width: 100%;
-  margin: 10px 0 0 0;
-  cursor: pointer;
-}
-
-.contact-info a {
-  color: #22d3ee;
-  text-decoration: none;
-}
-.contact-info a:hover {
-  text-decoration: underline;
-}
-
-/* ==========================================================================
-   CALL TO ACTION (CTA)
-   ========================================================================== */
-.cta {
-  padding: 80px 20px;
+/* Contact Info Direct */
+.contact-info {
   text-align: center;
-  background: linear-gradient(90deg, #1e3a8a, #0b0f1a);
 }
 
-.cta h2 {
-  color: white;
-  margin-bottom: 20px;
+.contact-info p {
+  background: var(--bg-card);
+  display: inline-block;
+  padding: 15px 25px;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+  margin: 10px;
 }
 
 /* ==========================================================================
-   FOOTER STRUCTURE ENRICHIE
+   8. FOOTER SOMBRE ET HARMONIEUX
    ========================================================================== */
 .footer {
-  background: #0b0f1a;
-  border-top: 1px solid #1f2937;
-  padding: 50px 20px 20px 20px;
-  text-align: center;
+  background: #03050b;
+  padding: 60px 5% 25px 5%;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  margin-top: 100px;
 }
 
 .footer-content {
-  max-width: 1100px;
-  margin: 0 auto 30px auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  gap: 30px;
-  text-align: left;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
 }
 
-.footer-content h3 {
-  color: white;
-  margin-bottom: 10px;
+.footer-brand h3 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
 }
 
-.footer-content .foot ul {
-  list-style: none;
-  margin-top: 8px;
+.footer-brand p {
+  color: var(--text-muted);
 }
 
-.footer-content .foot ul li {
-  margin-bottom: 5px;
+.footer-socials .github-link {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  transition: all 0.3s ease;
 }
 
-.footer-content .foot ul li a {
-  color: #94a3b8;
+.footer-socials .github-link:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: var(--primary);
   text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-content .foot ul li a:hover {
-  color: #22d3ee;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
 }
 
 .copyright {
-  font-size: 14px;
-  color: #94a3b8;
-  border-top: 1px solid rgba(55, 65, 81, 0.4);
-  padding-top: 20px;
+  text-align: center;
+  color: #4b5563;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.02);
+  padding-top: 25px;
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN (TABLETTES & MOBILES)
+   9. MEDIA QUERIES (ADAPTATION RESPONSIVE PARFAITE)
    ========================================================================== */
-@media (max-width: 768px) {
-  .header {
+
+/* Écrans Tablettes (max-width: 992px) */
+@media screen and (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* Passe à 2 colonnes */
+  }
+  .hero h1 {
+    font-size: 42px;
+  }
+}
+
+/* Écrans Intermédiaires (max-width: 768px) */
+@media screen and (max-width: 768px) {
+  .about-founder {
     flex-direction: column;
-    gap: 15px;
-    padding: 20px;
+    text-align: center;
+    gap: 30px;
+  }
+  .section {
+    padding: 70px 5%;
+  }
+}
+
+/* Smartphones (max-width: 576px) */
+@media screen and (max-width: 576px) {
+  .menu-toggle {
+    display: flex; /* Affiche l'icône burger */
+  }
+
+  /* Configuration du tiroir de menu coulissant mobile */
+  .nav {
+    position: fixed;
+    top: 74px;
+    right: -100%; /* Totalement masqué à droite */
+    width: 85%;
+    height: calc(100vh - 74px);
+    background: rgba(6, 9, 19, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 0;
+    gap: 35px;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+  }
+
+  .nav.open {
+    right: 0; /* Entre sur l'écran lors du clic */
   }
 
   .nav a {
-    margin: 0 10px;
+    margin-left: 0;
+    font-size: 1.2rem;
+  }
+
+  /* ANIMATION EN CROIX DU BURGER (MENU OPEN) */
+  .menu-toggle.open .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .menu-toggle.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-toggle.open .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  /* SUPPRESSION COMPLET DES GRILLES SUR SMALL MOBILE */
+  .grid,
+  .news-container {
+    grid-template-columns: 1fr; /* 1 carte par ligne */
+    gap: 20px;
+  }
+
+  .hero {
+    padding: 90px 15px;
   }
 
   .hero h1 {
-    font-size: 32px;
+    font-size: 30px;
   }
 
-  .hero p {
-    font-size: 1rem;
-  }
-
-  .grid {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .card,
-  .values .card {
-    width: 100%;
-    max-width: 340px;
+  .form-container {
+    padding: 30px 20px; /* Réduction des paddings pour gagner de l'espace */
   }
 
   .footer-content {
@@ -427,27 +663,4 @@ body {
     text-align: center;
     align-items: center;
   }
-
-  .form-container {
-    padding: 20px;
-  }
-}
-
-.foot {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.github-link {
-  color: #22d3ee !important; /* Force la couleur cyan */
-  text-decoration: none !important; /* Enlève le soulignement moche */
-  font-weight: 600;
-  display: inline-block;
-  margin-top: 5px;
-  transition: opacity 0.2s ease;
-}
-
-.github-link:hover {
-  opacity: 0.8; /* Légère transparence au survol */
 }

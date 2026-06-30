@@ -1,17 +1,45 @@
 // ==========================================================================
-// MJPE Tech - Main JS
+// MJPE Tech - Main JS (Nettoyé des alertes natives)
 // ==========================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("MJPE Tech JS chargé avec succès 🚀");
 
-  // 1. Gestion du défilement fluide
+  // 1. Initialisation du menu responsive (Burger)
+  initResponsiveMenu();
+
+  // 2. Gestion du défilement fluide
   initSmoothScroll();
 
-  // 2. Gestion de l'envoi asynchrone du formulaire
+  // 3. Gestion de l'envoi asynchrone du formulaire
   initContactFormAJAX();
 });
 
+/**
+ * GÈRE L'OUVERTURE ET LA FERMETURE DU MENU BURGER SUR MOBILE
+ */
+function initResponsiveMenu() {
+  const menuToggle = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".nav");
+
+  if (menuToggle && nav) {
+    menuToggle.addEventListener("click", () => {
+      menuToggle.classList.toggle("open");
+      nav.classList.toggle("open");
+    });
+
+    document.querySelectorAll(".nav a").forEach((link) => {
+      link.addEventListener("click", () => {
+        menuToggle.classList.remove("open");
+        nav.classList.remove("open");
+      });
+    });
+  }
+}
+
+/**
+ * ANIME LE DÉFILEMENT POUR LES LIENS INTERNES ANCRÉS (#)
+ */
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
@@ -30,19 +58,35 @@ function initSmoothScroll() {
   });
 }
 
+/**
+ * ENVOIE LE FORMULAIRE VIA FORMSPREE SANS ALERTE NAVIGATEUR
+ */
 function initContactFormAJAX() {
   const form = document.querySelector(".contact-form");
   const nameInput = document.getElementById("name");
 
   if (form) {
+    // On crée une zone de message dans le DOM juste en dessous du formulaire si elle n'existe pas
+    let statusMessage = document.getElementById("form-status");
+    if (!statusMessage) {
+      statusMessage = document.createElement("p");
+      statusMessage.id = "form-status";
+      statusMessage.style.marginTop = "20px";
+      statusMessage.style.fontWeight = "600";
+      statusMessage.style.textAlign = "center";
+      statusMessage.style.transition = "all 0.3s ease";
+      form.appendChild(statusMessage); // Ajoute le p à la fin du formulaire
+    }
+
     form.addEventListener("submit", function (e) {
-      // Empêche la redirection vers la page blanche de Formspree
       e.preventDefault();
 
-      // Préparation des données du formulaire
+      // Message de chargement temporaire discret
+      statusMessage.style.color = "var(--text-muted)";
+      statusMessage.innerText = "Envoi en cours...";
+
       const formData = new FormData(form);
 
-      // Envoi des données en arrière-plan à Formspree
       fetch(form.action, {
         method: form.method,
         body: formData,
@@ -52,22 +96,30 @@ function initContactFormAJAX() {
       })
         .then((response) => {
           if (response.ok) {
-            // 1. Tout supprimer (réinitialise le formulaire)
             form.reset();
+            if (nameInput) nameInput.focus();
 
-            // 2. Remettre le curseur (focus) dans le champ Nom
-            if (nameInput) {
-              nameInput.focus();
-            }
+            // Style Succès : Vert néon
+            statusMessage.style.color = "#10b981";
+            statusMessage.innerText =
+              "✓ Votre message a bien été envoyé à MJPE Tech.";
 
-            console.log("Message envoyé avec succès !");
+            // Efface le message automatiquement après 5 secondes
+            setTimeout(() => {
+              statusMessage.innerText = "";
+            }, 5000);
           } else {
-            alert("Une erreur est survenue lors de l'envoi.");
+            // Style Erreur : Rouge/Orange néon
+            statusMessage.style.color = "#f43f5e";
+            statusMessage.innerText =
+              "✕ Une erreur est survenue. Veuillez réessayer.";
           }
         })
         .catch((error) => {
           console.error("Erreur réseau :", error);
-          alert("Impossible d'envoyer le message pour le moment.");
+          statusMessage.style.color = "#f43f5e";
+          statusMessage.innerText =
+            "✕ Impossible d'accéder au serveur. Vérifiez votre connexion.";
         });
     });
   }

@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>À propos - MJPE Tech</title>
+
     <link rel="stylesheet" href="assets/css/style.css" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,9 +18,16 @@
   <body>
     <header class="header">
       <div class="logo">MJPE Tech</div>
+
+      <button class="menu-toggle" aria-label="Ouvrir le menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
       <nav class="nav">
         <a href="index.html">Accueil</a>
-        <a href="about.html">À propos</a>
+        <a href="about.html" class="active">À propos</a>
         <a href="news.html">Nouveautés</a>
         <a href="contact.html">Contact</a>
       </nav>
@@ -60,17 +69,19 @@
     <section class="section values">
       <h2>Fondateur</h2>
 
-      <img
-        src="assets/images/elia-fondateur.jpg"
-        alt="Elia Mushamuka Jean-Paul"
-        class="profile-pic"
-      />
+      <div class="about-founder">
+        <img
+          src="assets/images/elia-fondateur.jpg"
+          alt="Elia Mushamuka Jean-Paul"
+          class="profile-pic"
+        />
 
-      <p>
-        MJPE Tech est fondé par Elia Mushamuka Jean-Paul (MJPE), passionné par
-        la programmation, la cybersécurité, les télécoms et les technologies
-        émergentes.
-      </p>
+        <p>
+          MJPE Tech est fondé par Elia Mushamuka Jean-Paul (MJPE), passionné par
+          la programmation, la cybersécurité, les télécoms et les technologies
+          émergentes.
+        </p>
+      </div>
 
       <blockquote class="temoignage">
         <p>
@@ -89,16 +100,17 @@
           <h3>MJPE Tech</h3>
           <p>Transformer la passion en innovation</p>
         </div>
-        <div class="foot">
+        <div class="footer-socials">
           <p><strong>Réseaux :</strong></p>
-          <ul>
-            <li>
-              <a href="https://github.com/MJPE-ELIA" target="_blank">GitHub</a>
-            </li>
-          </ul>
+          <a
+            href="https://github.com/MJPE-ELIA"
+            target="_blank"
+            class="github-link"
+            >GitHub</a
+          >
         </div>
       </div>
-      <p class="copyright">© 2026 MJPE Tech</p>
+      <p class="copyright">© 2026 MJPE Tech - Tous droits réservés</p>
     </footer>
 
     <script src="assets/js/main.js"></script>
